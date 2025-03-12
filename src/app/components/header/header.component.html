@@ -1,37 +1,31 @@
 <header>
-  <form>
-    <div
-      class="bg-gray-700 text-white font-bold text-xl px-4 py-3 shadow flex justify-between items-center"
-    >
-      <app-navbar></app-navbar>
-      <div class="flex items-center">
-        <button
-          routerLink="/login"
-          class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded mr-4"
+    <app-navbar></app-navbar>
+    <div class="flex items-center">
+      <button
+        [routerLink]="['/login']"
+        routerLinkActive="router-link-active"
+      >
+        Login/Sign Up
+      </button>
+      <svg
+        width="48"
+        height="48"
+        viewBox="0 0 48 48"
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-12 w-12"
+      >
+        <rect width="48" height="48" fill="#00b7c3" rx="8" ry="8" />
+        <text
+          x="50%"
+          y="50%"
+          dominant-baseline="middle"
+          text-anchor="middle"
+          font-size="24"
+          fill="white"
+          font-family="Arial, sans-serif"
         >
-          Login/Sign Up
-        </button>
-        <svg
-          width="48"
-          height="48"
-          viewBox="0 0 48 48"
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-12 w-12"
-        >
-          <rect width="48" height="48" fill="#00b7c3" rx="8" ry="8" />
-          <text
-            x="50%"
-            y="50%"
-            dominant-baseline="middle"
-            text-anchor="middle"
-            font-size="24"
-            fill="white"
-            font-family="Arial, sans-serif"
-          >
-            B
-          </text>
-        </svg>
-      </div>
+          B
+        </text>
+      </svg>
     </div>
-  </form>
 </header>

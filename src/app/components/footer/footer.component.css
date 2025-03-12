@@ -1,0 +1,14 @@
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: #94a3b8; /* equivalent to bg-slate-400 */
+    bottom: 0;
+    font-size: small;
+    box-shadow: 0 4px 2px -2px gray; /* equivalent to shadow */
+}
+
+a {
+    color: white; /* equivalent to text-white */
+}

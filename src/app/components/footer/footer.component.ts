@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
+  standalone: true,
   imports: [],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.css'
@@ -9,4 +10,5 @@ import { Component, signal } from '@angular/core';
 export class FooterComponent {
   footer = signal('Angular Application created by Brendan A. Burgee');
   email_link = signal('mailto:brendanburgee@gmail.com');
+  constructor() {}
 }

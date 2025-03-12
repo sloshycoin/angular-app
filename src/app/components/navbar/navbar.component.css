@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+ul {
+  display: flex;
+  gap: 1rem;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
