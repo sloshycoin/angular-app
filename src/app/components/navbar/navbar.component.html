@@ -1,9 +1,23 @@
 <div class="container">
-  <ul>
+  <ul class="left">
     <li>
-      <button [routerLink]="['/']" routerLinkActive="router-link-active">
+      <button id="home" [routerLink]="['/']" routerLinkActive="router-link-active">
         Angular Application
       </button>
+    </li>
+  </ul>
+  <ul class="right">
+    <li>
+      <button class="feature-button" [routerLink]="['/feature1']" routerLinkActive="router-link-active">Feature 1</button>
+    </li>
+    <li>
+      <button class="feature-button" [routerLink]="['/feature2']" routerLinkActive="router-link-active">Feature 2</button>
+    </li>
+    <li>
+      <button class="feature-button" [routerLink]="['/feature3']" routerLinkActive="router-link-active">Feature 3</button>
+    </li>
+    <li>
+      <button class="feature-button" [routerLink]="['/feature4']" routerLinkActive="router-link-active">Feature 4</button>
     </li>
   </ul>
 </div>
