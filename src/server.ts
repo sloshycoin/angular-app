@@ -4,9 +4,10 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
-import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import express from 'express';
+import mysql from 'mysql2';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -14,17 +15,29 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/**', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
+const db = mysql.createPool({
+  host: 'localhost',
+  database: 'angularapp',
+  user: 'angularadmin',
+  password: 'appadmin',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
+
+app.get('/api/login', (req, res) => {
+  const { username, password } = req.body;
+  const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
+  db.query(query, [username, password], (err, results, fields) => {
+    if (err) {
+      res.status(500).send('Internal Server Error');
+    } else if (results) {
+      res.status(200).send('Login successful');
+    } else {
+      res.status(401).send('Invalid username or password');
+    }
+  });
+});
 
 /**
  * Serve static files from /browser
