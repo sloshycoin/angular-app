@@ -71,7 +71,7 @@ app.post('/api/login', async (req, res) => {
 
   const user = rows[0];
   if (user && await bcrypt.compare(req.body.password, user.password)) {
-    const token = jwt.sign({ id: user.id, name: user.name, email: user.email }, jwtSecret, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id, name: user.username, email: user.email }, jwtSecret, { expiresIn: '1h' });
     res.status(200).json({ message: 'Login successful', auth: token });
   } else {
     res.status(401).json({ message: 'Invalid credentials', auth: null });
