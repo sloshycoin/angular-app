@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { User } from '../models/user';
 
-interface Authentication {
+export interface Authentication {
   auth: string;
   message: string;
 }
 
-interface Registration {
+export interface Registration {
   message: string;
   registered: boolean;
 }
@@ -20,8 +19,8 @@ interface Registration {
 })
 export class UserService {
   private apiUrl = 'http://localhost:4000/api';
-
-  constructor(private http: HttpClient, private router: Router) {}
+  
+  constructor(private http: HttpClient) {}
 
   getUser(username: string, email: string): Observable<User[]> {
     return this.http.post<User[]>(`${this.apiUrl}/users`, { username, email });
@@ -53,6 +52,5 @@ export class UserService {
 
   logout() {
     localStorage.removeItem('token');
-    this.router.navigate(['/']);
   }
 }
