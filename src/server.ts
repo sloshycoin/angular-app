@@ -7,7 +7,13 @@ import {
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
-import mysql from 'mysql2';
+import mysql, {
+  ConnectionOptions,
+  ResultSetHeader,
+  RowDataPacket,
+} from 'mysql2/promise';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -15,28 +21,63 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-const db = mysql.createPool({
+const jwtSecret = 'Angular_App_Secret_for_JWT'; // Replace with your actual secret
+
+const dbConfig: ConnectionOptions = {
   host: 'localhost',
   database: 'angularapp',
   user: 'angularadmin',
   password: 'appadmin',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
+};
+
+interface User extends RowDataPacket {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  signupdate: Date;
+  logindate: Date;
+}
+
+app.post('/api/users', async (req, res) => {
+  const { username, email } = req.body;
+  const connection = await mysql.createConnection(dbConfig);
+  const [rows] = await connection.query<User[]>('SELECT * FROM users WHERE username = ? OR email = ?', [username, email]);
+  await connection.end();
+  res.status(200).json(rows);
 });
 
-app.get('/api/login', (req, res) => {
-  const { username, password } = req.body;
-  const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
-  db.query(query, [username, password], (err, results, fields) => {
-    if (err) {
-      res.status(500).send('Internal Server Error');
-    } else if (results) {
-      res.status(200).send('Login successful');
-    } else {
-      res.status(401).send('Invalid username or password');
-    }
-  });
+app.post('/api/register', async (req, res) => {
+  const connection = await mysql.createConnection(dbConfig);
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
+  const [result] = await connection.query<ResultSetHeader>(
+    'INSERT INTO users (username, email, password, signupdate) VALUES (?, ?, ?, ?)',
+    [
+      req.body.username,
+      req.body.email,
+      hashedPassword,
+      new Date(),
+    ]
+  );
+  await connection.end();
+  res.status(200).json({ id: result.insertId });
+});
+
+app.post('/api/login', async (req, res) => {
+  const connection = await mysql.createConnection(dbConfig);
+  const [rows] = await connection.query<User[]>(
+    'SELECT * FROM users WHERE username = ?',
+    [req.body.username]
+  );
+  await connection.end();
+
+  const user = rows[0];
+  if (user && await bcrypt.compare(req.body.password, user.password)) {
+    const token = jwt.sign({ id: user.id, name: user.name, email: user.email }, jwtSecret, { expiresIn: '1h' });
+    res.status(200).json({ message: 'Login successful', auth: token });
+  } else {
+    res.status(401).json({ message: 'Invalid credentials', auth: null });
+  }
 });
 
 /**
@@ -47,7 +88,7 @@ app.use(
     maxAge: '1y',
     index: false,
     redirect: false,
-  }),
+  })
 );
 
 /**
@@ -57,7 +98,7 @@ app.use('/**', (req, res, next) => {
   angularApp
     .handle(req)
     .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
+      response ? writeResponseToNodeResponse(response, res) : next()
     )
     .catch(next);
 });

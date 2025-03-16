@@ -11,28 +11,36 @@ export class UserService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
+  getUser(username: string, email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/users`, { username, email });
+  }
+
   login(username: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, { username, password });
   }
 
-  register(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, { username, password });
+  register(username: string, email: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, {
+      username,
+      email,
+      password,
+    });
   }
 
-  checkUserExists(username: string, email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/checkUserExists`, { username, email });
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 
-  logout() {
-    localStorage.removeItem('token');
-    this.router.navigate(['/login']);
+  setToken(token: string) {
+    localStorage.setItem('token', token);
   }
 
   isAuthenticated(): boolean {
     return !!localStorage.getItem('token');
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/']);
   }
 }
