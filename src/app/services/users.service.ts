@@ -5,6 +5,16 @@ import { Observable } from 'rxjs';
 
 import { User } from '../models/user';
 
+interface Authentication {
+  auth: string;
+  message: string;
+}
+
+interface Registration {
+  message: string;
+  registered: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -17,12 +27,12 @@ export class UserService {
     return this.http.post<User[]>(`${this.apiUrl}/users`, { username, email });
   }
 
-  login(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { username, password });
+  login(username: string, password: string): Observable<Authentication> {
+    return this.http.post<Authentication>(`${this.apiUrl}/login`, { username, password });
   }
 
-  register(username: string, email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, {
+  register(username: string, email: string, password: string): Observable<Registration> {
+    return this.http.post<Registration>(`${this.apiUrl}/register`, {
       username,
       email,
       password,

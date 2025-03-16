@@ -13,6 +13,7 @@ import mysql, {
 } from 'mysql2/promise';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+
 import { User } from './app/models/user';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -53,10 +54,10 @@ app.post('/api/register', async (req, res) => {
   await connection.end();
   
   if (result.affectedRows > 0) {
-    res.status(201).json({ message: 'User registered successfully' });
+    res.status(201).json({ message: 'User registered successfully', registered: true });
   }
   else {
-    res.status(400).json({ message: 'User registration failed' });
+    res.status(400).json({ message: 'User registration failed', registered: false });
   }
 });
 
