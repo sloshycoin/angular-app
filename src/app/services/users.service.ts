@@ -21,7 +21,9 @@ export interface Registration {
 export class UserService {
   private apiUrl = 'http://localhost:4000/api';
   
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    console.log('Connected to the User Service');
+  }
 
   getUser(username: string, email: string): Observable<User[]> {
     return this.http.post<User[]>(`${this.apiUrl}/users`, { username, email });

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { UserService, Registration, Authentication } from '../../services/users.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-signup',
@@ -17,9 +19,7 @@ export class SignupComponent {
   emailError: string | null = null;
   passwordError: string | null = null;
 
-  constructor() {
-    console.log('SignupComponent constructor');
-  }
+  constructor(private userService: UserService) { }
 
   validateUsername() {
     const usernameRegex = /^[a-zA-Z0-9]{8,}$/;
@@ -46,5 +46,27 @@ export class SignupComponent {
     } else {
       this.passwordError = null;
     }
+  }
+
+  onSubmit() {
+    const registration$: Observable<Registration> = this.userService.register(this.username, this.email, this.password);
+    registration$.subscribe(
+      (response: Registration) => {
+        console.log('Registration successful:', response.registered);
+        const login$: Observable<Authentication> = this.userService.login(this.username, this.password);
+        login$.subscribe(
+          (response: Authentication) => {
+            console.log('Login successful:', response.message);
+            this.userService.setToken(response.auth);
+          },
+          (error) => {
+            console.error('Login failed:', error);
+          }
+        );
+      },
+      (error) => {
+        console.error('Registration failed:', error);
+      }
+    );
   }
 }
