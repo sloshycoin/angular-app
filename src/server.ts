@@ -10,10 +10,10 @@ import express from 'express';
 import mysql, {
   ConnectionOptions,
   ResultSetHeader,
-  RowDataPacket,
 } from 'mysql2/promise';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { User } from './app/models/user';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -29,15 +29,6 @@ const dbConfig: ConnectionOptions = {
   user: 'angularadmin',
   password: 'appadmin',
 };
-
-interface User extends RowDataPacket {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
-  signupdate: Date;
-  logindate: Date;
-}
 
 app.post('/api/users', async (req, res) => {
   const { username, email } = req.body;
@@ -60,7 +51,13 @@ app.post('/api/register', async (req, res) => {
     ]
   );
   await connection.end();
-  res.status(200).json({ id: result.insertId });
+  
+  if (result.affectedRows > 0) {
+    res.status(201).json({ message: 'User registered successfully' });
+  }
+  else {
+    res.status(400).json({ message: 'User registration failed' });
+  }
 });
 
 app.post('/api/login', async (req, res) => {

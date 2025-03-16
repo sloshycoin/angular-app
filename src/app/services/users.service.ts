@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
+import { User } from '../models/user';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -11,8 +13,8 @@ export class UserService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getUser(username: string, email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/users`, { username, email });
+  getUser(username: string, email: string): Observable<User[]> {
+    return this.http.post<User[]>(`${this.apiUrl}/users`, { username, email });
   }
 
   login(username: string, password: string): Observable<any> {
