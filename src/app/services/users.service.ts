@@ -7,6 +7,7 @@ import { User } from '../models/user';
 export interface Authentication {
   auth: string;
   message: string;
+  role: string;
 }
 
 export interface Registration {

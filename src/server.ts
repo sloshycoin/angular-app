@@ -43,7 +43,7 @@ app.post('/api/register', async (req, res) => {
   const connection = await mysql.createConnection(dbConfig);
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
   const [result] = await connection.query<ResultSetHeader>(
-    'INSERT INTO users (username, email, password, signupdate) VALUES (?, ?, ?, ?)',
+    'INSERT INTO users (username, email, password, signupdate, role) VALUES (?, ?, ?, ?, "user")',
     [
       req.body.username,
       req.body.email,
@@ -72,9 +72,9 @@ app.post('/api/login', async (req, res) => {
   const user = rows[0];
   if (user && await bcrypt.compare(req.body.password, user.password)) {
     const token = jwt.sign({ id: user.id, name: user.username, email: user.email }, jwtSecret, { expiresIn: '1h' });
-    res.status(200).json({ message: 'Login successful', auth: token });
+    res.status(200).json({ message: 'Login successful', auth: token , role: user.role });
   } else {
-    res.status(401).json({ message: 'Invalid credentials', auth: null });
+    res.status(401).json({ message: 'Invalid credentials', auth: null , role: null });
   }
 });
 

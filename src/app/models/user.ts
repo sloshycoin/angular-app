@@ -7,4 +7,5 @@ export interface User extends RowDataPacket {
     password: string;
     signupdate: Date;
     logindate: Date;
+    role: string;
 }
