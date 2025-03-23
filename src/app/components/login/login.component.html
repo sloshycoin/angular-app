@@ -13,8 +13,9 @@
   </form>
   <button
     type="route"
-    [routerLink]="['/signup']"
-    routerLinkActive="router-link-active"
+    routerLink="/signup"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
   >
     Sign Up
   </button>

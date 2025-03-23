@@ -1,23 +1,48 @@
 <div class="container">
   <ul class="left">
     <li>
-      <button id="home" [routerLink]="['/']" routerLinkActive="router-link-active">
+      <a
+        id="home"
+        routerLink=""
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
         Angular Application
-      </button>
+      </a>
     </li>
   </ul>
   <ul class="right">
     <li>
-      <button class="feature-button" [routerLink]="['/feature1']" routerLinkActive="router-link-active">Feature 1</button>
+      <a
+        routerLink="/feature1"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Feature 1</a
+      >
     </li>
     <li>
-      <button class="feature-button" [routerLink]="['/feature2']" routerLinkActive="router-link-active">Feature 2</button>
+      <a
+        routerLink="/feature2"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Feature 2</a
+      >
     </li>
     <li>
-      <button class="feature-button" [routerLink]="['/feature3']" routerLinkActive="router-link-active">Feature 3</button>
+      <a
+        routerLink="/feature3"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Feature 3</a
+      >
     </li>
     <li>
-      <button class="feature-button" [routerLink]="['/feature4']" routerLinkActive="router-link-active">Feature 4</button>
+      <a
+        routerLink="/feature4"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Feature 4</a
+      >
     </li>
   </ul>
 </div>

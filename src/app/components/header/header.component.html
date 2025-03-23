@@ -1,12 +1,13 @@
 <header>
     <app-navbar></app-navbar>
     <div class="flex items-center">
-      <button
-        [routerLink]="['/login']"
-        routerLinkActive="router-link-active"
+      <a class="button"
+        routerLink="/login"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
       >
         Login/Sign Up
-      </button>
+      </a>
       <svg
         width="48"
         height="48"

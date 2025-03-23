@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { UserService, Authentication } from '../../services/users.service';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [RouterModule],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
